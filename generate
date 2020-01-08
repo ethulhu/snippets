@@ -26,14 +26,22 @@ TEMPLATE = '''
 </head>
 <body>
     <main>
-        {%- macro section(depth, name, snippets) -%}
-            <section>
+        {%- macro section(depth, path, name, snippets) -%}
+        {%- with -%}
+        {%- if depth == 1 -%}
+            {%- set id = '' -%}
+        {%- elif depth == 2 -%}
+            {%- set id = name -%}
+        {%- else -%}
+            {%- set id = path ~ '/' ~ name -%}
+        {%- endif -%}
+            <section id='{{ id | urlencode }}'>
             <h{{ depth }}>{{ name }}</h{{ depth}}>
             {%- if snippets is string -%}
                 <pre>{{ snippets | strip }}</pre>
             {%- elif snippets is mapping -%}
                 {%- for k, v in snippets.items() -%}
-                    {{ section(depth + 1, k, v) }}
+                    {{ section(depth + 1, id, k, v) }}
                 {%- endfor %}
             {%- else -%}
                 {%- for snippet in snippets -%}
@@ -41,8 +49,9 @@ TEMPLATE = '''
                 {%- endfor -%}
             {%- endif -%}
             </section>
+        {%- endwith -%}
         {%- endmacro -%}
-        {{ section(1, 'Snippets', snippets) }}
+        {{ section(1, '', 'Snippets', snippets) }}
     </main>
     <script type='module'>
     </script>
