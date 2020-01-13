@@ -65,3 +65,19 @@ Python:
                 environment.filters['strip'] = lambda s: s.strip()
                 print(environment.from_string(TEMPLATE).render(
                 snippets=snippets), file=args.output)
+
+Go:
+        net.Listen: |
+                var conn net.Listener
+                var err error
+                if *port != 0 {
+                        conn, err = net.Listen("tcp", fmt.Sprintf(":%v", *port))
+                } else if *socket != "" {
+                        _ = os.Remove(*socket)
+                        conn, err = net.Listen("unix", *socket)
+                        _ = os.Chmod(*socket, 0660)
+                }
+                if err != nil {
+                        log.Fatalf("failed to listen: %v", err)
+                }
+                defer conn.Close()
