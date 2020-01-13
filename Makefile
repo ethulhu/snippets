@@ -1,4 +1,4 @@
-index.html: db.yaml
+index.html: db.yaml generate
 	./generate --db $< --output $@
 
 clean:
