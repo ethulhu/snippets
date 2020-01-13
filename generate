@@ -36,16 +36,16 @@ TEMPLATE = '''
             {%- set id = path ~ '/' ~ name -%}
         {%- endif -%}
             <section id='{{ id | urlencode }}'>
-            <h{{ depth }}>{{ name }}</h{{ depth}}>
+            <h{{ depth }}>{{ name | escape }}</h{{ depth }}>
             {%- if snippets is string -%}
-                <pre>{{ snippets | strip }}</pre>
+                <pre>{{ snippets | strip | escape }}</pre>
             {%- elif snippets is mapping -%}
                 {%- for k, v in snippets.items() -%}
                     {{ section(depth + 1, id, k, v) }}
                 {%- endfor %}
             {%- else -%}
                 {%- for snippet in snippets -%}
-                    <pre>{{ snippet | strip }}</pre>
+                    <pre>{{ snippet | strip | escape }}</pre>
                 {%- endfor -%}
             {%- endif -%}
             </section>
