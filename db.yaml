@@ -81,3 +81,52 @@ Go:
                         log.Fatalf("failed to listen: %v", err)
                 }
                 defer conn.Close()
+        gorilla.Websocket: |
+                pongTimout := 15*time.Second
+                pingPeriod := (pongTimeout / 9) * 10
+
+                conn, _, err := websocket.DefaultDialer.DialContext(ctx, uri, nil)
+                if err != nil {
+                        ...
+                }
+
+                conn.SetPongHandler(func(text string) error {
+                        return conn.SetReadDeadline(time.Now().Add(pongTimeout))
+                })
+
+                connectionClosed := make(chan struct{})
+                readChan := make(chan interface{})
+                go func() {
+                        defer close(connectionClosed)
+                        for {
+                                data := &ResponseObject{}
+                                if err := conn.ReadJSON(data); err != nil {
+                                        // pass the error down a channel, or log it, or something.
+                                        return  // closes connectionClosed, so the write loop also stops.
+                                }
+                                readChan <- data
+                        }
+                }()
+
+                writeChan := make(chan interface{})
+                go func() {
+                        ping := ticker.NewTicker(pingPeriod)
+                        defer ping.Stop()
+                        for {
+                                select {
+                                case data := <-writeChan:
+                                        if err := conn.WriteJSON(data); err != nil {
+                                                // handle error, etc etc.
+                                                return  // ends the pings, eventually ending the connection.
+                                        }
+                                case <-ping.C:
+                                        if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+                                                // likewise handle the error somehow.
+                                                return  // ends the pings, eventually ending the connection.
+                                        }
+                                case <-connectionClosed:
+                                        conn.Close()
+                                        return
+                                }
+                        }
+                }()
