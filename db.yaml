@@ -45,11 +45,19 @@ JavaScript:
 
 CSS:
         Night Mode: |
+                :root {
+                        --background-color: white;
+                        --foreground-color: black;
+                }
                 @media (prefers-color-scheme: dark) {
-                        body {
-                                background: #1f1f1f;
-                                color: #ddd;
-                        }
+                    :root {
+                        --background-color: #1f1f1f;
+                        --foreground-color: #ddd;
+                    }
+                }
+                body {
+                        background: var(--background-color);
+                        color:      var(--foreground-color);
                 }
 
 Python:
