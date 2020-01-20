@@ -81,7 +81,7 @@ Go:
                         log.Fatalf("failed to listen: %v", err)
                 }
                 defer conn.Close()
-        gorilla.Websocket: |
+        gorilla/websocket: |
                 pongTimout := 15*time.Second
                 pingPeriod := (pongTimeout / 9) * 10
 
@@ -130,3 +130,7 @@ Go:
                                 }
                         }
                 }()
+        text/template: |
+                {{ range $index, $item := $items }}
+                        {{ ( index $item 3 ).Timestamp | formatTimestamp }}
+                {{ end }}
