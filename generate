@@ -36,7 +36,7 @@ TEMPLATE = '''
             {%- set id = path ~ '/' ~ name -%}
         {%- endif -%}
             <section id='{{ id | urlencode }}'>
-            <h{{ depth }}>{{ name | escape }}</h{{ depth }}>
+            <h{{ depth }}><a href='#{{ id | urlencode }}'>{{ name | escape }}</a></h{{ depth }}>
             {%- if snippets is string -%}
                 <pre>{{ snippets | strip | escape }}</pre>
             {%- elif snippets is mapping -%}
