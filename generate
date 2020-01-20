@@ -8,20 +8,43 @@ import jinja2
 
 from typing import Any, Dict, List, Union
 
+# body{margin:40px auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}
 
 TEMPLATE = '''
 <!DOCTYPE html>
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>snippets</title>
     <style>
+        :root {
+                --background-color: white;
+                --foreground-color: black;
+                --accent-color:     grey;
+        }
         @media (prefers-color-scheme: dark) {
-            body {
-                background: #1f1f1f;
-                color: #ddd;
+            :root {
+                --background-color: #1f1f1f;
+                --foreground-color: #ddd;
             }
         }
+
+        body {
+                background: var(--background-color);
+                color:      var(--foreground-color);
+        }
+        a, a:visited {
+                color: var(--accent-color);
+        }
+        a:hover {
+                color: var(--foreground-color);
+        }
+
+        h1,h2,h3 {
+                line-height: 1.2;
+        }
+
     </style>
 </head>
 <body>
