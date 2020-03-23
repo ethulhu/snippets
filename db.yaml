@@ -60,6 +60,34 @@ CSS:
                         color:      var(--foreground-color);
                 }
 
+        Grids: |
+                body {
+                        display:   grid;
+                        grid-gap:  10px;
+                        height:    100vh;
+                        margin:    0;
+
+                        grid-template-areas:
+                            "header  main  ."
+                            "nav     main  .";
+                        grid-template-columns:
+                            1fr 4fr 1fr;
+                        grid-template-rows:
+                            auto 1fr;
+                }
+                header {
+                        grid-area:   header;
+                        text-align:  center;
+                }
+                main {
+                        grid-area:   main;
+                        overflow-y:  scroll;
+                }
+                nav {
+                        grid-area:   nav;
+                        overflow-y:  scroll;
+                }
+
 Python:
         Argument Parsing: |
                 parser = argparse.ArgumentParser(description=__doc__)
