@@ -2,6 +2,7 @@
 """generate an HTML file from a YAML Snippets DB."""
 
 import argparse
+import sys
 
 import yaml
 import jinja2
@@ -92,10 +93,22 @@ if __name__ == '__main__':
 
     bytes = args.db.read()
 
-    snippets = yaml.safe_load(bytes)
+    try:
+        snippets = yaml.safe_load(bytes)
+    except yaml.YAMLError as e:
+        print(f'failed to parse {args.db.name}: {e}', file=sys.stderr)
+        sys.exit(1)
 
     environment = jinja2.Environment()
     environment.filters['strip'] = lambda s: s.strip()
 
-    print(environment.from_string(TEMPLATE).render(
-        snippets=snippets), file=args.output)
+    try:
+        print(environment.from_string(TEMPLATE).render(
+            snippets=snippets), file=args.output)
+    except jinja2.TemplateError as e:
+        print(f'could not render template: {e}', file=sys.stderr)
+        sys.exit(1)
+    except TypeError as e:
+        print(f'got type error while rendering: {e}', file=sys.stderr)
+        print(f'{args.db.name} may have keys with no strings, e.g. "foo:" instead of "foo: |"', file=sys.stderr)
+        sys.exit(1)
