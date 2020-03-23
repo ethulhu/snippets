@@ -142,3 +142,17 @@ Go:
                 {{ range $index, $item := $items }}
                         {{ ( index $item 3 ).Timestamp | formatTimestamp }}
                 {{ end }}
+
+C:
+        platform macros: |
+                #if defined(__APPLE__)
+
+                #include <TargetConditionals.h>
+                #ifdef TARGET_OS_IPHONE
+                #endif
+
+                #elif defined(__linux__)
+
+                #else
+
+                #endif
