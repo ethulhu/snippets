@@ -193,7 +193,7 @@ Go:
                 {{ end }}
 
 C:
-        platform macros: |
+        Platform Macros: |
                 #if defined(__APPLE__)
 
                 #include <TargetConditionals.h>
