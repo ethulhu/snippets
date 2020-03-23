@@ -47,15 +47,58 @@ TEMPLATE = '''
                 line-height: 1.2;
         }
 
+        @media screen and ( min-width: 40em ) {
+                body {
+                    display:   grid;
+                    grid-gap:  10px;
+                    height:    100vh;
+                    margin:    0;
+
+                    grid-template-areas:
+                        "header  main  ."
+                        "nav     main  .";
+                    grid-template-columns:
+                        1fr 4fr 1fr;
+                    grid-template-rows:
+                        auto 1fr;
+                }
+        }
+        header {
+                grid-area:   header;
+                text-align:       center;
+        }
+        main {
+                grid-area:   main;
+                overflow-y:  scroll;
+        }
+        nav {
+                grid-area:   nav;
+                overflow-y:  scroll;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Snippets</h1>
+    </header>
+    <nav>
+        <ul>
+        {% for section, subsnippets in snippets.items() %}
+            <li>
+                <a href='#{{ section }}'>{{ section }}</a>
+                <ul>
+                {% for subsection in subsnippets %}
+                    <li><a href='#{{ section }}/{{ subsection }}'>{{ subsection }}</a></li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    </nav>
     <main>
         {%- macro section(depth, path, name, snippets) -%}
         {%- with -%}
-        {%- if depth == 1 -%}
-            {%- set id = '' -%}
-        {%- elif depth == 2 -%}
+        {%- if depth == 2 -%}
             {%- set id = name -%}
         {%- else -%}
             {%- set id = path ~ '/' ~ name -%}
@@ -76,7 +119,9 @@ TEMPLATE = '''
             </section>
         {%- endwith -%}
         {%- endmacro -%}
-        {{ section(1, '', 'Snippets', snippets) }}
+        {%- for heading, subsnippets in snippets.items() -%}
+            {{ section(2, heading, heading, subsnippets) }}
+        {%- endfor -%}
     </main>
     <script type='module'>
     </script>
