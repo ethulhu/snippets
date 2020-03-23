@@ -121,7 +121,7 @@ Python:
                 environment = jinja2.Environment()
                 environment.filters['strip'] = lambda s: s.strip()
                 print(environment.from_string(TEMPLATE).render(
-                snippets=snippets), file=args.output)
+                    snippets=snippets), file=args.output)
 
 Go:
         net.Listen: |
