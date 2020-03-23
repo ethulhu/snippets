@@ -20,14 +20,15 @@ TEMPLATE = '''
     <title>snippets</title>
     <style>
         :root {
-                --background-color: white;
-                --foreground-color: black;
-                --accent-color:     grey;
+                --background-color:  white;
+                --foreground-color:  black;
+                --link-color:        #a0a0a0;
         }
         @media (prefers-color-scheme: dark) {
             :root {
-                --background-color: #1f1f1f;
-                --foreground-color: #ddd;
+                --background-color:  #1f1f1f;
+                --foreground-color:  #ddd;
+                --link-color:        #ababab;
             }
         }
 
@@ -36,7 +37,7 @@ TEMPLATE = '''
                 color:      var(--foreground-color);
         }
         a, a:visited {
-                color: var(--accent-color);
+                color: var(--link-color);
         }
         a:hover {
                 color: var(--foreground-color);
